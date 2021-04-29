@@ -1,0 +1,32 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h1>
+    List
+</h1>
+
+<button type="button"><a href="{{url_for('core.types_insert')}}">New</a></button>
+<button type="button"><a href="{{url_for('core.index')}}">Map</a></button>
+
+<table>
+    <thead>
+        <tr>
+            <th>Jeanne type</th>
+            <th>Jeanne name</th>
+            <th>Jeanne color</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for t in types %}
+        <tr>
+            <td>{{ t.jeanne_type }}</td>
+            <td>{{ t.jeanne_name }}</td>
+            <td>{{ t.jeanne_color }}</td>
+            <td><a href="{{ url_for('core.types_edit', jeanne_type=t.jeanne_type) }}">Edit</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+{% endblock %}

@@ -9,14 +9,10 @@ load_dotenv()
 
 class BaseConfig(object):
     ''' Base config class. '''
-
-    JEANNE_FILE = path.join(basedir, 'jeanne.dat')
     APP_NAME = environ.get('APP_NAME') or 'flask-boilerplate'
     ORIGINS = ['*']
     EMAIL_CHARSET = 'UTF-8'
-    API_KEY = environ.get('API_KEY')
-    BROKER_URL = environ.get('BROKER_URL')
-    RESULT_BACKEND = environ.get('RESULT_BACKEND')
+    SECRET_KEY = environ.get('SECRET_KEY')
     LOG_INFO_FILE = path.join(basedir, 'log', 'info.log')
     LOGGING = {
         'version': 1,
@@ -53,13 +49,12 @@ class BaseConfig(object):
             },
         },
     }
-    TYPES_JEANNE = {
-        'jeanne': ('Jeanne', 'red'),
-        'jeanne-et-serge': ('Jeanne et Serge', 'blue'),
-        'jeanne-d-arc': ('Jeanne d\'Arc', 'green'),
-        'jeanne-au-secours': ('Jeanne AU SECOURS !', 'purple'),
-        'marie-jeanne': ('Marie-Jeanne', 'pink'),
-    }
+
+    MONGODB_SETTINGS = {
+    'db': 'jeanne',
+    'host': 'localhost',
+    'port': 27017
+}
 
 
 class Development(BaseConfig):

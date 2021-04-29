@@ -4,8 +4,11 @@ from os import environ, path
 from dotenv import load_dotenv
 from flask import Flask
 
+from flask_mongoengine import MongoEngine
+
 from .config import config as app_config
 
+db = MongoEngine()
 
 def create_app():
     # loading env vars from .env file
@@ -15,10 +18,7 @@ def create_app():
     app = Flask(app_config[APPLICATION_ENV].APP_NAME)
     app.config.from_object(app_config[APPLICATION_ENV])
 
-    jeanne_file = app_config[APPLICATION_ENV].JEANNE_FILE
-
-    if not path.isfile(jeanne_file):
-        with open(jeanne_file, 'w'): pass
+    db.init_app(app)
 
     from .core.views import core as core_blueprint
     app.register_blueprint(

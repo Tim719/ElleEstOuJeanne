@@ -14,7 +14,7 @@
 
     var form = '\
     <form action="{{url_for("core.ajouter")}}" method="POST">\
-<select name="jeanne-type" id="jeanne-type">\
+<select name="jeanne_type" id="jeanne_type">\
     {% for t, v in types_jeanne.items() %}\
         <option value="{{t}}">{{v[0]}}</option>\
     {% endfor %}\
@@ -39,10 +39,10 @@
         var popup = L.popup();
 
         {% for jeanne in jeannes %}
-        L.circleMarker([{{jeanne[1]}}, {{jeanne[2]}}], {
+        L.circleMarker([{{jeanne.lat}}, {{jeanne.lng}}], {
             radius: 10,
-            color: "{{ types_jeanne[jeanne[0]][1] }}"
-        }).bindPopup("{{types_jeanne[jeanne[0]][0]}}").addTo(mymap);
+            color: "{{ types_jeanne[jeanne.jeanne_type.jeanne_type][1] }}"
+        }).bindPopup("{{types_jeanne[jeanne.jeanne_type.jeanne_type][0]}}<br /><em>{{ jeanne.created_at }}</em>").addTo(mymap);
         {% endfor %}
 
         function onMapClick(e) {
