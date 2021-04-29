@@ -1,0 +1,60 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+<h1>
+    Elle est où Jeanne ?
+</h1>
+
+<div id="mapid"></div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+
+    var form = '\
+    <form action="{{url_for("core.ajouter")}}" method="POST">\
+<select name="jeanne-type" id="jeanne-type">\
+    {% for t, v in types_jeanne.items() %}\
+        <option value="{{t}}">{{v[0]}}</option>\
+    {% endfor %}\
+</select>\
+<input type="hidden" name="lat" id="lat">\
+<input type="hidden" name="lng" id="lng">\
+<input type="submit" value="Envoyer">\
+</form>\
+    ';
+
+    window.onload = function () {
+        var mymap = L.map('mapid').setView([45.764043, 4.835659], 13);
+        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            maxZoom: 18,
+            id: 'mapbox/streets-v11',
+            tileSize: 512,
+            zoomOffset: -1,
+            accessToken: 'pk.eyJ1IjoidGltNzE5IiwiYSI6ImNrbzJ3NW1vbzBsOWoyb3MybHFxYzV1NHMifQ.2o5KknLvJv9tGGumgvb64A'
+        }).addTo(mymap);
+
+        var popup = L.popup();
+
+        {% for jeanne in jeannes %}
+        L.circleMarker([{{jeanne[1]}}, {{jeanne[2]}}], {
+            radius: 10,
+            color: "{{ types_jeanne[jeanne[0]][1] }}"
+        }).bindPopup("{{types_jeanne[jeanne[0]][0]}}").addTo(mymap);
+        {% endfor %}
+
+        function onMapClick(e) {
+            popup
+                .setLatLng(e.latlng)
+                .setContent("<h3>C'est quel type de Jeanne ?</h3>" + form)
+                .openOn(mymap);
+            $("#lat").val(e.latlng.lat);
+            $("#lng").val(e.latlng.lng);
+        }
+
+        mymap.on('click', onMapClick);
+    };
+</script>
+{% endblock %}
